@@ -19,10 +19,13 @@ module.exports = {
   get languages() {
     return require('./languages').default;
   },
-    get width() {
+  get width() {
     return width;
   },
   get height() {
     return height;
+  },
+  get words() {
+    return require('./words').default;
   },
 };

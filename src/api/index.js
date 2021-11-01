@@ -1,5 +1,5 @@
-import * as Auth from './Auth';
+import * as Word from './Word';
 
 export default {
-  Auth,
+  Word,
 };

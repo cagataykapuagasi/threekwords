@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, StatusBar } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import { Provider } from 'mobx-react';
-import { Home } from './src/screens';
+import { Home, Details, Settings } from './src/screens';
 import { colors } from 'res';
 import RNBootSplash from 'react-native-bootsplash';
 import { store } from './src/store';
@@ -18,49 +18,77 @@ const Tabs = createBottomTabNavigator();
 const TabStack = () => (
   <Tabs.Navigator
     // eslint-disable-next-line react/jsx-no-bind
-    tabBar={(props) => <MyTabBar {...props} icons={['home', 'settings']} />}
-    screenOptions={{ headerStyle: styles.headerStyle, headerTitleStyle: styles.headerTitleStyle }}
-    lazy={false}
-    tabBarOptions={{ showLabel: false }}>
-    <Tabs.Screen name="Home" component={Home} />
-    <Tabs.Screen name="Home2" component={Home} />
+    tabBar={(props) => (
+      <MyTabBar
+        {...props}
+        icons={['home-outline', 'settings-outline']}
+        activeIcons={['home', 'settings']}
+      />
+    )}
+    screenOptions={{
+      headerStyle: styles.headerStyle,
+      headerTitleStyle: styles.headerTitleStyle,
+      tabBarStyle: styles.tabBarStyle,
+      lazy: false,
+    }}>
+    <Tabs.Screen name="Word" component={Home} />
+    <Tabs.Screen name="Settings" component={Settings} />
   </Tabs.Navigator>
 );
 
 const App = () => {
   useEffect(() => {
-    store
-      .init()
-      .then(() => {
-        //
-      })
-      .catch(() => {
-        //
-      })
-      .finally(() => RNBootSplash.hide({ duration: 250 }));
+    RNBootSplash.hide({ duration: 250 });
   }, []);
 
   return (
-    <Provider store={store}>
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <NavigationContainer ref={setNavigation}>
-        <RootStack.Navigator screenOptions={{ presentation: 'modal' }}>
-          <RootStack.Screen component={TabStack} name="Main" options={{ headerShown: false }} />
-          <RootStack.Screen component={Home} name="SelectForm" options={{ headerShown: false }} />
+        <RootStack.Navigator
+          screenOptions={{
+            presentation: 'modal',
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+            headerTitleContainerStyle: styles.headerTitleContainerStyle,
+          }}>
+          <RootStack.Screen
+            component={TabStack}
+            name="Main"
+            options={{ headerShown: false, cardStyle: styles.cardStyle }}
+          />
+          <RootStack.Screen
+            component={Details}
+            name="Details"
+            options={{ headerLeft: null, headerTitleAlign: 'left' }}
+          />
         </RootStack.Navigator>
       </NavigationContainer>
-    </Provider>
+    </View>
   );
 };
 
 export default App;
 
 const styles = ScaledSheet.create({
+  container: {
+    flex: 1,
+  },
   headerStyle: {
-    backgroundColor: '#000',
-    shadowColor: colors.secondaryDark,
+    backgroundColor: colors.secondary,
+    shadowColor: colors.secondary,
+  },
+  headerTitleContainerStyle: {
+    marginLeft: '20@s',
   },
   headerTitleStyle: {
     color: '#fff',
+    fontFamily: 'Avenir',
+    fontWeight: 'bold',
+    fontSize: '25@s',
+    textTransform: 'capitalize',
+  },
+  cardStyle: {
+    backgroundColor: '#000',
   },
 });

@@ -1,13 +1,11 @@
 import React from 'react';
 import { colors, width } from 'res';
-import { View, Dimensions, Animated, StyleSheet, Pressable } from 'react-native';
+import { View, Animated, Pressable } from 'react-native';
 import TabIcon from './TabIcon';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 import TabManager from './TabManager';
-
-const AnimatedIcon = Animated.createAnimatedComponent(TabIcon);
 
 export function changeTab(i, onPress) {
   const ref = TabManager.getDefault();
@@ -26,7 +24,7 @@ export default class TabBarItem extends React.Component {
     };
   }
 
-  translateY = new Animated.Value(-scale(5));
+  translateY = new Animated.Value(-scale(6));
   translateX = new Animated.Value(-width / 4);
 
   valueSelector = (selectedIndex) => {
@@ -72,7 +70,7 @@ export default class TabBarItem extends React.Component {
   };
 
   render() {
-    const { state, descriptors, navigation, icons } = this.props;
+    const { state, descriptors, navigation, icons, activeIcons } = this.props;
     const { selectedIndex } = this.state;
 
     return (
@@ -103,7 +101,7 @@ export default class TabBarItem extends React.Component {
               <TabIcon
                 fields={{ focused: isFocused, icon: icons[i] }}
                 type="ionicons"
-                name={icons[i]}
+                name={isFocused ? activeIcons[i] : icons[i]}
               />
             </Pressable>
           );
@@ -121,7 +119,7 @@ export default class TabBarItem extends React.Component {
 const styles = ScaledSheet.create({
   container: {
     zIndex: 999,
-    backgroundColor: colors.secondaryDark,
+    backgroundColor: colors.secondary,
     ...ifIphoneX(
       {
         height: '70@s',
@@ -137,10 +135,6 @@ const styles = ScaledSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
   },
   navItem: {
     flex: 1,

@@ -1,5 +1,4 @@
 import { create } from 'apisauce';
-import { mapWithKeys } from '~/utils';
 
 let token = null;
 
@@ -26,7 +25,7 @@ export function request(method, path, params = {}, customHeaders = {}) {
       ...headers,
       ...customHeaders,
     },
-  }).then(response => {
+  }).then((response) => {
     if (response.ok) {
       return Promise.resolve(response.data);
     } else {
@@ -34,9 +33,6 @@ export function request(method, path, params = {}, customHeaders = {}) {
       if (violations) {
         return Promise.reject({
           error: message || title,
-          errors: mapWithKeys(violations, violation => {
-            return [violation.propertyPath, violation.message];
-          }),
           ...others,
           status: response.status,
         });

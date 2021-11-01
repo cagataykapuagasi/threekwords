@@ -14,7 +14,7 @@ import { scale } from 'react-native-size-matters';
 class Icon extends PureComponent {
   render() {
     const { props } = this;
-    const { type, size } = props;
+    const { type, size = 20 } = props;
 
     if (type === 'ionicons') {
       return <Ionicons size={scale(size)} {...props} />;

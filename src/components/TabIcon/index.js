@@ -19,7 +19,7 @@ export default class TabIcon extends Component {
         useNativeDriver: true,
       }),
       Animated.spring(this.translateY, {
-        toValue: focused ? -5 : 0,
+        toValue: focused ? -6 : 0,
         duration: 250,
         useNativeDriver: true,
       }),
@@ -27,6 +27,10 @@ export default class TabIcon extends Component {
   };
 
   componentDidUpdate() {
+    this.handleAnimation();
+  }
+
+  componentDidMount() {
     this.handleAnimation();
   }
 

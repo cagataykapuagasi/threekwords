@@ -1,4 +1,4 @@
-[
+const words = [
   'April',
   'August',
   'CD',
@@ -3207,3 +3207,5 @@
   'zero',
   'zone',
 ];
+
+export default words;
