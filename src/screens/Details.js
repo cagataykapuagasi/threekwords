@@ -8,6 +8,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
 import { getWordInformation } from '~/api/Word';
 import ContentLoader, { Rect, Circle } from 'react-content-loader/native';
+import Sound from 'react-native-sound';
+
+Sound.setCategory('Playback');
+Sound.setActive(true);
+Sound.enableInSilenceMode(true);
 
 const Details = ({
   route: {
@@ -16,22 +21,35 @@ const Details = ({
   navigation,
 }) => {
   const [detail, setDetail] = useState();
-  const [loading, setLoading] = useState(true);
+  const [sound, setSound] = useState(null);
+
+  const playSound = () => {
+    sound.play(() => {});
+  };
 
   useEffect(() => {
-    navigation.setOptions({ title: word.name });
-
     getWordInformation(word.name).then((res) => {
       setDetail(res);
-      console.log(res);
+      const _sound = new Sound('https:' + res?.[0]?.phonetics?.[0].audio);
+      setSound(_sound);
     });
   }, []);
 
   useEffect(() => {
     if (detail) {
-      // setLoading(false);
+      navigation.setOptions({
+        title: word.name,
+        headerTitle: () => (
+          <View style={styles.header}>
+            <Text style={styles.headerTitleStyle}>{word.name}</Text>
+            <TouchableOpacity onPress={playSound}>
+              <Icon name="play-circle-outline" type="ionicons" size={30} color={'#fff'} />
+            </TouchableOpacity>
+          </View>
+        ),
+      });
     }
-  }, [detail]);
+  }, [sound]);
 
   if (!detail) {
     return (
@@ -148,6 +166,18 @@ const styles = ScaledSheet.create({
     textTransform: 'capitalize',
     fontSize: '12@s',
     marginTop: '10@s',
+  },
+  headerTitleStyle: {
+    color: '#fff',
+    fontFamily: 'Avenir',
+    fontWeight: 'bold',
+    fontSize: '25@s',
+    textTransform: 'capitalize',
+    marginRight: '10@s',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
