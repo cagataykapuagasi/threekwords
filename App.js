@@ -6,7 +6,7 @@ import { colors } from 'res';
 import RNBootSplash from 'react-native-bootsplash';
 import { store } from './src/store';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { setNavigation } from '~/utils/navigation';
 import { Icon, TabIcon, TabLabel, MyTabBar } from '~/components';
@@ -43,7 +43,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar animated translucent backgroundColor={'transparent'} barStyle="light-content" />
       <NavigationContainer ref={setNavigation}>
         <RootStack.Navigator
           screenOptions={{
@@ -51,6 +51,9 @@ const App = () => {
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
             headerTitleContainerStyle: styles.headerTitleContainerStyle,
+            cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
           }}>
           <RootStack.Screen
             component={TabStack}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, TouchableOpacity, ScrollView, SafeAreaView, StatusBar } from 'react-native';
 import { images, fonts, colors } from 'res';
 import { ScaledSheet } from 'react-native-size-matters';
 import { Icon, Text } from '~/components';
@@ -28,11 +28,15 @@ const Details = ({
   };
 
   useEffect(() => {
-    getWordInformation(word.name).then((res) => {
-      setDetail(res);
-      const _sound = new Sound('https:' + res?.[0]?.phonetics?.[0].audio);
-      setSound(_sound);
-    });
+    getWordInformation(word.name)
+      .then((res) => {
+        setDetail(res);
+        const _sound = new Sound('https:' + res?.[0]?.phonetics?.[0]?.audio);
+        if (_sound) {
+          setSound(_sound);
+        }
+      })
+      .catch((e) => getWordInformation(word.name));
   }, []);
 
   useEffect(() => {
@@ -65,9 +69,9 @@ const Details = ({
         <View style={styles.container}>
           {/* <Text style={styles.word}>{word.name}</Text> */}
           {detail ? (
-            detail?.[0]?.meanings?.map((item) => {
+            detail?.[0]?.meanings?.map((item, i) => {
               return (
-                <View key={item.partOfSpeech} style={styles.meanings}>
+                <View key={i} style={styles.meanings}>
                   <Text style={styles.partOfSpeech}>{item.partOfSpeech}</Text>
                   {item?.definitions?.map((i, index) => (
                     <View key={index} style={styles.definations}>

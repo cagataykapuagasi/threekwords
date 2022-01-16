@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, StatusBar } from 'react-native';
 import { images, fonts, colors } from 'res';
 import { ScaledSheet } from 'react-native-size-matters';
 import { Icon, Text } from '~/components';
