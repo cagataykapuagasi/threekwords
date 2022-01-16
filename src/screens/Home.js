@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, StatusBar } from 'react-native';
-import { images, fonts, colors } from 'res';
+import { View, TouchableOpacity } from 'react-native';
+import { colors } from 'res';
 import { ScaledSheet } from 'react-native-size-matters';
 import { Icon, Text } from '~/components';
 import { words as _words } from 'res';
 import LinearGradient from 'react-native-linear-gradient';
-import AsyncStorage from '@react-native-community/async-storage';
-import { getWordInformation } from '~/api/Word';
+import AsyncStorage, { useAsyncStorage } from '@react-native-community/async-storage';
 
 const Home = ({ navigation }) => {
   const [word, setWord] = useState({ name: null, index: null });
   const [words, setWords] = useState([]);
+  const { getItem, setItem } = useAsyncStorage('removedWords');
 
   useEffect(() => {
     AsyncStorage.getItem('words').then((res) => {
@@ -39,12 +39,21 @@ const Home = ({ navigation }) => {
     setWord({ name: words[number], index: number });
   };
 
-  const removeFromList = () => {
+  const removeFromList = async () => {
     const newWords = [...words];
-    newWords.splice(word.index, 1);
+    const removedWord = newWords.splice(word.index, 1);
 
     setWords(newWords);
+
     AsyncStorage.setItem('words', JSON.stringify(newWords));
+
+    let removedWords = JSON.parse(await getItem());
+
+    if (!removedWords) {
+      removedWords = [];
+    }
+
+    setItem(JSON.stringify([...removedWords, ...removedWord]));
   };
 
   const openDetails = () => {

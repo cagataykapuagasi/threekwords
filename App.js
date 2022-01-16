@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import { View, StatusBar } from 'react-native';
-import { Provider } from 'mobx-react';
 import { Home, Details, Settings } from './src/screens';
 import { colors } from 'res';
 import RNBootSplash from 'react-native-bootsplash';
-import { store } from './src/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { setNavigation } from '~/utils/navigation';
-import { Icon, TabIcon, TabLabel, MyTabBar } from '~/components';
+import { MyTabBar } from '~/components';
 import { ScaledSheet } from 'react-native-size-matters';
 
 const RootStack = createStackNavigator();
@@ -21,8 +19,8 @@ const TabStack = () => (
     tabBar={(props) => (
       <MyTabBar
         {...props}
-        icons={['home-outline', 'settings-outline']}
-        activeIcons={['home', 'settings']}
+        icons={['home-outline', 'information-circle-outline']}
+        activeIcons={['home', 'information-circle']}
       />
     )}
     screenOptions={{

@@ -139,6 +139,8 @@ const styles = ScaledSheet.create({
   navItem: {
     flex: 1,
     alignItems: 'center',
+    zIndex: 1,
+    elevation: 6,
   },
   circleShadow: {
     position: 'absolute',
@@ -150,7 +152,6 @@ const styles = ScaledSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-    zIndex: -1,
     ...ifIphoneX(
       {
         bottom: '18@s',
