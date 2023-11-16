@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { width } from 'res';
 import { ScaledSheet } from 'react-native-size-matters';
 import { Text } from '~/components';
 import { useAsyncStorage } from '@react-native-community/async-storage';
 import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { Icon } from '../components';
 
 const keyExtractor = (item, index) => item + index;
 
@@ -24,15 +26,49 @@ const renderItem = ({ item }) => {
   );
 };
 
-const Settings = ({ params }) => {
-  const { getItem } = useAsyncStorage('removedWords');
+const Settings = ({ navigation }) => {
+  const { getItem, removeItem } = useAsyncStorage('removedWords');
   const [words, setWords] = useState([]);
   const isFocused = useIsFocused();
+
+  const clean = () => {
+    Alert.alert('Are you sure?', 'Do you want to delete all learned words?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          removeItem();
+          setWords([]);
+        },
+      },
+    ]);
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ opacity: !words?.length ? 0.5 : 1 }}
+          disabled={!words?.length}
+          onPress={clean}>
+          <Icon style={styles.icon} name="trash" type="ionicons" size={20} color={'#fff'} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [words]);
 
   useEffect(() => {
     const getWords = async () => {
       const removedWords = await getItem();
-      if (removedWords && JSON.stringify(words) !== removedWords) {
+      if (!removedWords) {
+        setWords([]);
+      }
+
+      if (JSON.stringify(words) !== removedWords) {
         setWords(JSON.parse(removedWords));
       }
     };
@@ -45,7 +81,7 @@ const Settings = ({ params }) => {
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       data={words}
-      ListHeaderComponent={ListHeaderComponent}
+      // ListHeaderComponent={ListHeaderComponent}
       ListFooterComponent={ListFooterComponent}
       style={styles.container}
       numColumns={3}
@@ -81,5 +117,8 @@ const styles = ScaledSheet.create({
   },
   footer: {
     height: '40@s',
+  },
+  icon: {
+    marginRight: '16@s',
   },
 });
