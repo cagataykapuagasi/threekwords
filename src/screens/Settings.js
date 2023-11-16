@@ -8,8 +8,12 @@ import { useIsFocused } from '@react-navigation/native';
 
 const keyExtractor = (item, index) => item + index;
 
-const ListHeaderComponent = (params) => {
+const ListHeaderComponent = () => {
   return <Text style={styles.title}>Learned Words</Text>;
+};
+
+const ListFooterComponent = () => {
+  return <View style={styles.footer} />;
 };
 
 const renderItem = ({ item }) => {
@@ -21,7 +25,7 @@ const renderItem = ({ item }) => {
 };
 
 const Settings = ({ params }) => {
-  const { getItem, setItem, removeItem } = useAsyncStorage('removedWords');
+  const { getItem } = useAsyncStorage('removedWords');
   const [words, setWords] = useState([]);
   const isFocused = useIsFocused();
 
@@ -42,6 +46,7 @@ const Settings = ({ params }) => {
       renderItem={renderItem}
       data={words}
       ListHeaderComponent={ListHeaderComponent}
+      ListFooterComponent={ListFooterComponent}
       style={styles.container}
       numColumns={3}
     />
@@ -55,6 +60,7 @@ const styles = ScaledSheet.create({
     flex: 1,
     backgroundColor: '#000',
     padding: '20@s',
+    paddingBottom: 0,
   },
   item: {
     color: '#fff',
@@ -72,5 +78,8 @@ const styles = ScaledSheet.create({
     width: width / 3,
     justifyContent: 'center',
     marginTop: '20@s',
+  },
+  footer: {
+    height: '40@s',
   },
 });

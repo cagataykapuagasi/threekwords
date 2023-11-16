@@ -4,8 +4,8 @@ import { View, Animated, Pressable } from 'react-native';
 import TabIcon from './TabIcon';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 import LinearGradient from 'react-native-linear-gradient';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
 import TabManager from './TabManager';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 export function changeTab(i, onPress) {
   const ref = TabManager.getDefault();
